@@ -1,26 +1,31 @@
-console.log("Welcome WEB Note app")
-showNote()
 let addbtn = document.getElementById("addbtn")
-// To Add the notes
-addbtn.addEventListener("click", function(e) {
-  let addtext = document.getElementById("addtext")
-  let notes = localStorage.getItem("notes")
+showNote();
 
-  if (notes == null) {
-    notesObj = [];
-  }
-  else {
-    notesObj = JSON.parse(notes)
-  }
+addbtn.addEventListener("click", function (e) {
+    let addtext = document.getElementById("addtext")
+    let addtittle = document.getElementById("addtittle")
 
-  notesObj.push(addtext.value)
-  localStorage.setItem("notes", JSON.stringify(notesObj));
-  addtext.value = "";
-  // console.log(notesObj);
-  showNote()
+    const values ={
+        "tittle": addtittle.value,
+        "text": addtext.value
+    }
 
+    let notes = localStorage.getItem("notes")
+
+    if (notes == null) {
+        notesObj = [];
+    }
+    else {
+        notesObj = JSON.parse(notes)
+    }
+
+    notesObj.push(values)
+    localStorage.setItem("notes", JSON.stringify(notesObj));
+    addtext.value = "";
+    addtittle.value = "";
+    console.log(notesObj);
+    showNote();
 })
-
 
 
 // To Show the notes on webpage
@@ -35,16 +40,15 @@ function showNote() {
     notesObj = JSON.parse(notes)
   }
   let ihtml = "";
-  notesObj.forEach(function(Element, index) {
-    ihtml += `
-         <div class="noteCards card my-3 mx-3" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Note ${index + 1}</h5>
-                <p class="card-text">${Element}</p>
-                <button id="${index}"onclick="deleteNote(this.id)" class="btn btn-danger">Delete Note </button>
-            </div>
-        </div> 
-    
+  Array.from(notesObj).forEach(function (element, index) {
+    ihtml += ` 
+        <div class="noteCards card my-3 mx-2" style="width: 18rem;">
+        <div class="card-body">
+            <h4 class="card-title">${element['tittle']}</h4>
+            <p class="card-text">${element['text']}</p>
+            <button id="${index}" onclick="deleteNote(this.id)" class="btn btn-danger">Delete Note </button>
+        </div>
+    </div> 
     `
   });
 
@@ -102,5 +106,3 @@ search.addEventListener("input", function() {
 
 
 })
-
-
